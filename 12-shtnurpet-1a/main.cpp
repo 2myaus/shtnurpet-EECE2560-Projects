@@ -1,3 +1,5 @@
+// by Daniil Petrov
+
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
