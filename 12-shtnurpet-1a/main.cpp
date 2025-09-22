@@ -48,7 +48,7 @@ unsigned int code::checkCorrect(code &guess) const {
 
   // count and return number of equal digits between the two guesses
   return std::inner_product(guess.digits.begin(), guess.digits.end(),
-                            digits.begin(), 0, std::plus(), std::equal_to());
+                            digits.begin(), 0, std::plus<>(), std::equal_to<>());
 }
 
 unsigned int code::checkIncorrect(code &guess) const {
