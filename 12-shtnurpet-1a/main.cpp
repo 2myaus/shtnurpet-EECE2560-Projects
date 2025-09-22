@@ -61,7 +61,7 @@ unsigned int code::checkIncorrect(code &guess) const {
   unsigned int num_incorrect = 0;
   for (unsigned int i = 0; i < digit_count; i++) {
     // if the code has previously contained this digit, skip
-    if (std::find(digits.begin(), digits.begin() + i, digits[i]) ==
+    if (std::find(digits.begin(), digits.begin() + i, digits[i]) !=
         digits.begin() + i)
       continue;
 
@@ -73,7 +73,7 @@ unsigned int code::checkIncorrect(code &guess) const {
     bool any_correct = false;
     // if the guess has this digit correct in any place, skip
     for (unsigned int i2 = 0; i2 < guess.digit_count; i2++) {
-      if (i2 < digit_count && digits[i2] == guess.digits[i2])
+      if ((i2 < digit_count) && (digits[i2] == guess.digits[i2]) && (digits[i2] == digits[i]))
         any_correct = true;
     }
     if (any_correct)
