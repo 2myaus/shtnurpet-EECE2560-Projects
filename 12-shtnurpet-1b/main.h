@@ -32,7 +32,7 @@ class code
       Returns: number of digits in correct positions
       Assumptions: guess.digit_count <= digit_count
     */
-    unsigned int checkCorrect(code &guess) const;
+    unsigned int checkCorrect(const code &guess) const;
 
     /*!
       Counts the number of unique digits that appear in both codes but are not
@@ -44,7 +44,7 @@ class code
       Returns: number of unique incorrect digits
       Assumptions: guess.digit_count <= digit_count
     */
-    unsigned int checkIncorrect(code &guess) const;
+    unsigned int checkIncorrect(const code &guess) const;
 
     /*! Number of digits in this code */
     const unsigned int digit_count;
@@ -67,13 +67,13 @@ class response
 {
   public:
     /*! Constructor that compares two codes */
-    response(code &code1, code &code2);
+    response(const code &code1, const code &code2);
 
     /*! Getter function for the number of correct digits in the response */
-    const unsigned int getNumCorrect();
+    unsigned int getNumCorrect() const;
 
     /*! Getter function for the number of incorrect digits in the response */
-    const unsigned int getNumIncorrect();
+    unsigned int getNumIncorrect() const;
 
   private:
     const unsigned int num_correct;
@@ -81,10 +81,13 @@ class response
 };
 
 /*! Equality operator which checks if two responses are identical */
-bool operator==(response &lhs, response &rhs);
+bool operator==(const response &lhs, const response &rhs);
 
-/*! Output operator which writes the response to an output stream */
-std::ostream &operator<<(std::ostream &lhs, response &rhs);
+/*! Output operator which writes a response to an output stream */
+std::ostream &operator<<(const std::ostream &lhs, const response &rhs);
+
+/*! Output operator which writes a code to an output stream */
+std::ostream &operator<<(const std::ostream &lhs, const code &rhs);
 
 /*! Class represening a full game of Mastermind */
 class mastermind

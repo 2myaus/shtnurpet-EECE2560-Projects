@@ -43,7 +43,7 @@ code::code(const std::vector<unsigned short> &digits)
 
 // Counts the number of identical digits appearing in the same location between
 // the guess and the code
-unsigned int code::checkCorrect(code &guess) const
+unsigned int code::checkCorrect(const code &guess) const
 {
     // Assert that the guess is no longer than the code
     assert(guess.digit_count <= digit_count);
@@ -59,7 +59,7 @@ unsigned int code::checkCorrect(code &guess) const
 
 // Counts the number of identical digits appearing in the different locations
 // between the guess and the code, counting each digit only once
-unsigned int code::checkIncorrect(code &guess) const
+unsigned int code::checkIncorrect(const code &guess) const
 {
     unsigned int num_incorrect = 0;
 
@@ -101,33 +101,73 @@ const std::vector<unsigned short> &code::getDigits() const
 }
 
 /*! Constructor that compares two codes */
-response::response(code &code1, code &code2)
+response::response(const code &code1, const code &code2)
     : num_correct(code1.checkCorrect(code2)),
       num_incorrect(code1.checkIncorrect(code2))
 {
 }
 
 /*! Getter function for the number of correct digits in the response */
-const unsigned int response::getNumCorrect()
+unsigned int response::getNumCorrect() const
 {
     return num_correct;
 }
 
 /*! Getter function for the number of incorrect digits in the response */
-const unsigned int response::getNumIncorrect()
+unsigned int response::getNumIncorrect() const
 {
     return num_incorrect;
 }
 
 /*! Equality operator which checks if two responses are identical */
-bool operator==(response &lhs, response &rhs)
+bool operator==(const response &lhs, const response &rhs)
 {
     return (lhs.getNumCorrect() == rhs.getNumCorrect()) &&
            (lhs.getNumIncorrect() == rhs.getNumIncorrect());
 }
 
 /*! Output operator which writes the response to an output stream */
-std::ostream &operator<<(std::ostream &lhs, response &rhs)
+std::ostream &operator<<(std::ostream &lhs, const response &rhs)
+{
+    // TODO
+}
+
+/*! Output operator which writes a code to an output stream */
+std::ostream &operator<<(std::ostream &lhs, const code &rhs){
+    // TODO
+}
+
+/*! Constructor with default values n=5, m=10 declared in main.h */
+mastermind::mastermind(unsigned short n, unsigned short m) : secretCode(n, m)
+{
+}
+
+/*! Prints the secret code to stdout */
+void mastermind::printSecretCode() const
+{
+    std::cout << "Secret code: " << secretCode << std::endl;
+}
+
+/*! Generates a guess code from keyboard input */
+code mastermind::humanGuess() const
+{
+    // TODO
+}
+
+/*! generates a comparison response from a guess code */
+response mastermind::getResponse(code &guess) const
+{
+    return response(secretCode, guess);
+}
+
+/*! Checks if a comparison response solves the game */
+bool mastermind::isSolved(response &solution) const
+{
+    return (solution == response(secretCode, secretCode));
+}
+
+/* Initializes and plays a game, calling humanGuess() until the game ends */
+void mastermind::playGame()
 {
     // TODO
 }
@@ -136,33 +176,7 @@ std::ostream &operator<<(std::ostream &lhs, response &rhs)
 // random code and testing it with three different guesses.
 int main()
 {
-    // Create a random code with 5 digits in range [0, 7)
-    code guessing(5, 7);
-    const std::vector<unsigned short> guessing_digits = guessing.getDigits();
-
-    printf("The code: ");
-    std::for_each(guessing_digits.begin(),
-                  guessing_digits.end(),
-                  [&](unsigned short digit) { printf("%i ", digit); });
-    printf("\n");
-
-    // Create three test guesses
-    code guess1({5, 0, 3, 2, 6});
-    code guess2({2, 1, 2, 2, 2});
-    code guess3({1, 3, 3, 4, 5});
-
-    // Check each guess for correct and incorrect digits
-    unsigned int guess1_correct = guessing.checkCorrect(guess1);
-    unsigned int guess1_incorrect = guessing.checkIncorrect(guess1);
-    unsigned int guess2_correct = guessing.checkCorrect(guess2);
-    unsigned int guess2_incorrect = guessing.checkIncorrect(guess2);
-    unsigned int guess3_correct = guessing.checkCorrect(guess3);
-    unsigned int guess3_incorrect = guessing.checkIncorrect(guess3);
-
-    // Display results
-    printf("Guess 1: (5 0 3 2 6): %i, %i\n", guess1_correct, guess1_incorrect);
-    printf("Guess 2: (2 1 2 2 2): %i, %i\n", guess2_correct, guess2_incorrect);
-    printf("Guess 3: (1 3 3 4 5): %i, %i\n", guess3_correct, guess3_incorrect);
+    // TODO
 
     return 0;
 } // end main
