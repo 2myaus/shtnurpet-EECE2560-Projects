@@ -127,13 +127,13 @@ bool operator==(const response &lhs, const response &rhs)
 }
 
 /*! Output operator which writes the response to an output stream */
-std::ostream &operator<<(std::ostream &lhs, const response &rhs)
+std::ostream &operator<<(const std::ostream &lhs, const response &rhs)
 {
     // TODO
 }
 
 /*! Output operator which writes a code to an output stream */
-std::ostream &operator<<(std::ostream &lhs, const code &rhs){
+std::ostream &operator<<(const std::ostream &lhs, const code &rhs){
     // TODO
 }
 
@@ -155,13 +155,13 @@ code mastermind::humanGuess() const
 }
 
 /*! generates a comparison response from a guess code */
-response mastermind::getResponse(code &guess) const
+response mastermind::getResponse(const code &guess) const
 {
     return response(secretCode, guess);
 }
 
 /*! Checks if a comparison response solves the game */
-bool mastermind::isSolved(response &solution) const
+bool mastermind::isSolved(const response &solution) const
 {
     return (solution == response(secretCode, secretCode));
 }

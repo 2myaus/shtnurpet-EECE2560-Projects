@@ -103,10 +103,10 @@ class mastermind
     code humanGuess() const;
 
     /*! generates a comparison response from a guess code */
-    response getResponse(code &guess) const;
+    response getResponse(const code &guess) const;
 
     /*! Checks if a comparison response solves the game */
-    bool isSolved(response &solution) const;
+    bool isSolved(const response &solution) const;
 
     /* Initializes and plays a game, calling humanGuess() until the game ends */
     void playGame();
