@@ -1,6 +1,13 @@
-// Project 1b Michael Shteynberg Temirlan Nurtayev Daniil Petrov
-//
-// Main program file containing class definitions for a playable Mastermind
+/*
+
+Project 1b Michael Shteynberg Temirlan Nurtayev Daniil Petrov
+
+main.cpp: Contains function definitions for the classes:
+  code
+  response
+  mastermind
+
+*/
 
 #include "main.h"
 
@@ -32,15 +39,13 @@ code::code(const std::vector<unsigned short> &digits)
       digit_range(*std::max_element(digits.begin(), digits.end())),
       digits(digits)
 {
-} // end constructor
+}
 
-// Counts the number of digits in correct positions between this code and the
-// guess code.
-// Parameters: guess - the code to compare against
-// Returns: number of digits in correct positions
-// Assumptions: guess.digit_count <= digit_count
+// Counts the number of identical digits appearing in the same location between
+// the guess and the code
 unsigned int code::checkCorrect(code &guess) const
 {
+    // Assert that the guess is no longer than the code
     assert(guess.digit_count <= digit_count);
 
     // Count equal digits at same positions using inner_product
@@ -52,12 +57,8 @@ unsigned int code::checkCorrect(code &guess) const
                               std::equal_to<>());
 } // end code::checkCorrect
 
-// Counts the number of unique digits that appear in both codes but are not in
-// correct positions. If a digit appears more than once and any instance is
-// correct, it counts as 0 incorrect. Otherwise, it counts as 1 incorrect
-// regardless of frequency.
-// Parameters: guess - the code to compare against
-// Returns: number of unique incorrect digits
+// Counts the number of identical digits appearing in the different locations
+// between the guess and the code, counting each digit only once
 unsigned int code::checkIncorrect(code &guess) const
 {
     unsigned int num_incorrect = 0;
@@ -93,11 +94,43 @@ unsigned int code::checkIncorrect(code &guess) const
     return num_incorrect;
 } // end code::checkIncorrect
 
-// Returns: const reference to digits vector
+// Getter function for code::digits
 const std::vector<unsigned short> &code::getDigits() const
 {
     return digits;
-} // end code::getDigits
+}
+
+/*! Constructor that compares two codes */
+response::response(code &code1, code &code2)
+    : num_correct(code1.checkCorrect(code2)),
+      num_incorrect(code1.checkIncorrect(code2))
+{
+}
+
+/*! Getter function for the number of correct digits in the response */
+const unsigned int response::getNumCorrect()
+{
+    return num_correct;
+}
+
+/*! Getter function for the number of incorrect digits in the response */
+const unsigned int response::getNumIncorrect()
+{
+    return num_incorrect;
+}
+
+/*! Equality operator which checks if two responses are identical */
+bool operator==(response &lhs, response &rhs)
+{
+    return (lhs.getNumCorrect() == rhs.getNumCorrect()) &&
+           (lhs.getNumIncorrect() == rhs.getNumIncorrect());
+}
+
+/*! Output operator which writes the response to an output stream */
+std::ostream &operator<<(std::ostream &lhs, response &rhs)
+{
+    // TODO
+}
 
 // Main function that demonstrates the code class functionality by creating a
 // random code and testing it with three different guesses.

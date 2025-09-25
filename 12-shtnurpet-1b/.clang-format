@@ -20,6 +20,12 @@ BinPackParameters: false
 PenaltyBreakBeforeFirstCallParameter: 1000
 PenaltyBreakComment: 100
 PenaltyReturnTypeOnItsOwnLine: 200
-AlignTrailingComments: true   # Try to align end-of-line comments
 IndentCaseLabels: true
 
+# Comment formatting options
+ReflowComments: true
+AlignTrailingComments: true
+SpacesBeforeTrailingComments: 1
+
+# Keep doxygen/javadoc-style markers as-is (/*! ... */)
+CommentPragmas: '^!'
