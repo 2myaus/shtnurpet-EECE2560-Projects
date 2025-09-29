@@ -129,12 +129,22 @@ bool operator==(const response &lhs, const response &rhs)
 /*! Output operator which writes the response to an output stream */
 std::ostream &operator<<(const std::ostream &lhs, const response &rhs)
 {
-    // TODO
+    std::ostream &os = const_cast<std::ostream &>(lhs);
+    os << "Correct: " << rhs.getNumCorrect()
+       << ", Incorrect (right digit, wrong place): " << rhs.getNumIncorrect();
+    return os;
 }
 
 /*! Output operator which writes a code to an output stream */
 std::ostream &operator<<(const std::ostream &lhs, const code &rhs){
     // TODO
+    std::ostream &os = const_cast<std::ostream &>(lhs);
+    const auto &d = rhs.getDigits();
+    for (std::size_t i = 0; i < d.size(); ++i) {
+        os << d[i];
+        if (i + 1 < d.size()) os << ' ';
+    }
+    return os;
 }
 
 /*! Constructor with default values n=5, m=10 declared in main.h */
@@ -152,6 +162,50 @@ void mastermind::printSecretCode() const
 code mastermind::humanGuess() const
 {
     // TODO
+    const std::size_t n = secretCode.digit_count;
+    const unsigned short m = secretCode.digit_range;
+
+    std::vector<unsigned short> digits;
+    digits.reserve(n);
+
+    while (true) {
+        digits.clear();
+        std::cout << "Enter your guess (" << n
+                  << " digits in [0," << (m ? m - 1 : 0)
+                  << "], separated by spaces): ";
+
+        bool ok = true;
+        for (std::size_t i = 0; i < n; ++i) {
+            unsigned short x;
+            if (!(std::cin >> x)) {
+                ok = false;
+                std::cin.clear();
+            }
+            if (!ok) {
+                std::cin.ignore(1 << 20, '\n');
+                std::cout << "Invalid input. Try again.\n";
+                break;
+            }
+            digits.push_back(x);
+        }
+
+        if (!ok) continue;
+
+        if (std::cin.peek() != '\n') std::cin.ignore(1 << 20, '\n');
+        else std::cin.get();
+
+        bool in_range = true;
+        for (auto d : digits) {
+            if (d >= m) { in_range = false; break; }
+        }
+        if (!in_range) {
+            std::cout << "Each digit must be in [0," << (m ? m - 1 : 0)
+                      << "]. Try again.\n";
+            continue;
+        }
+
+        return code(digits);
+    }
 }
 
 /*! generates a comparison response from a guess code */
@@ -169,7 +223,20 @@ bool mastermind::isSolved(const response &solution) const
 /* Initializes and plays a game, calling humanGuess() until the game ends */
 void mastermind::playGame()
 {
-    // TODO
+    std::cout << "Welcome to Mastermind!\n";
+
+    unsigned int attempts = 0;
+    for (;;) {
+        code guess = humanGuess();
+        response r = getResponse(guess);
+        std::cout << r << std::endl;
+        ++attempts;
+
+        if (isSolved(r)) {
+            std::cout << "Solved in " << attempts << " attempt"
+                      << (attempts == 1 ? "" : "s") << "!\n";
+        }
+    }
 }
 
 // Main function that demonstrates the code class functionality by creating a
@@ -177,6 +244,18 @@ void mastermind::playGame()
 int main()
 {
     // TODO
+    code secret_demo(5, 10);
+    std::cout << "Demo secret: " << secret_demo << "\n";
 
+    code guess1({0, 0, 0, 0, 0});
+    code guess2({1, 2, 3, 4, 5});
+    code guess3(secret_demo.getDigits());
+
+    std::cout << "Guess 1: " << guess1 << " ==> " << response(secret_demo, guess1) << "\n";
+    std::cout << "Guess 2: " << guess2 << " ==> " << response(secret_demo, guess2) << "\n";
+    std::cout << "Guess 3: " << guess3 << " ==> " << response(secret_demo, guess3) << "\n";
+
+    mastermind game;
+    game.playGame();
     return 0;
 } // end main
