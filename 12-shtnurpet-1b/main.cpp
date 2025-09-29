@@ -136,13 +136,15 @@ std::ostream &operator<<(const std::ostream &lhs, const response &rhs)
 }
 
 /*! Output operator which writes a code to an output stream */
-std::ostream &operator<<(const std::ostream &lhs, const code &rhs){
-    // TODO
+std::ostream &operator<<(const std::ostream &lhs, const code &rhs)
+{
     std::ostream &os = const_cast<std::ostream &>(lhs);
     const auto &d = rhs.getDigits();
-    for (std::size_t i = 0; i < d.size(); ++i) {
+    for (std::size_t i = 0; i < d.size(); ++i)
+    {
         os << d[i];
-        if (i + 1 < d.size()) os << ' ';
+        if (i + 1 < d.size())
+            os << ' ';
     }
     return os;
 }
@@ -161,27 +163,29 @@ void mastermind::printSecretCode() const
 /*! Generates a guess code from keyboard input */
 code mastermind::humanGuess() const
 {
-    // TODO
     const std::size_t n = secretCode.digit_count;
     const unsigned short m = secretCode.digit_range;
 
     std::vector<unsigned short> digits;
     digits.reserve(n);
 
-    while (true) {
+    while (true)
+    {
         digits.clear();
-        std::cout << "Enter your guess (" << n
-                  << " digits in [0," << (m ? m - 1 : 0)
-                  << "], separated by spaces): ";
+        std::cout << "Enter your guess (" << n << " digits in [0,"
+                  << (m ? m - 1 : 0) << "], separated by spaces): ";
 
         bool ok = true;
-        for (std::size_t i = 0; i < n; ++i) {
+        for (std::size_t i = 0; i < n; ++i)
+        {
             unsigned short x;
-            if (!(std::cin >> x)) {
+            if (!(std::cin >> x))
+            {
                 ok = false;
                 std::cin.clear();
             }
-            if (!ok) {
+            if (!ok)
+            {
                 std::cin.ignore(1 << 20, '\n');
                 std::cout << "Invalid input. Try again.\n";
                 break;
@@ -189,16 +193,25 @@ code mastermind::humanGuess() const
             digits.push_back(x);
         }
 
-        if (!ok) continue;
+        if (!ok)
+            continue;
 
-        if (std::cin.peek() != '\n') std::cin.ignore(1 << 20, '\n');
-        else std::cin.get();
+        if (std::cin.peek() != '\n')
+            std::cin.ignore(1 << 20, '\n');
+        else
+            std::cin.get();
 
         bool in_range = true;
-        for (auto d : digits) {
-            if (d >= m) { in_range = false; break; }
+        for (auto d : digits)
+        {
+            if (d >= m)
+            {
+                in_range = false;
+                break;
+            }
         }
-        if (!in_range) {
+        if (!in_range)
+        {
             std::cout << "Each digit must be in [0," << (m ? m - 1 : 0)
                       << "]. Try again.\n";
             continue;
@@ -226,15 +239,18 @@ void mastermind::playGame()
     std::cout << "Welcome to Mastermind!\n";
 
     unsigned int attempts = 0;
-    for (;;) {
+    while (true)
+    {
         code guess = humanGuess();
         response r = getResponse(guess);
         std::cout << r << std::endl;
         ++attempts;
 
-        if (isSolved(r)) {
+        if (isSolved(r))
+        {
             std::cout << "Solved in " << attempts << " attempt"
-                      << (attempts == 1 ? "" : "s") << "!\n";
+                      << (attempts == 1 ? "" : "s") << "!" << std::endl;
+            return;
         }
     }
 }
@@ -243,7 +259,6 @@ void mastermind::playGame()
 // random code and testing it with three different guesses.
 int main()
 {
-    // TODO
     code secret_demo(5, 10);
     std::cout << "Demo secret: " << secret_demo << "\n";
 
@@ -251,9 +266,12 @@ int main()
     code guess2({1, 2, 3, 4, 5});
     code guess3(secret_demo.getDigits());
 
-    std::cout << "Guess 1: " << guess1 << " ==> " << response(secret_demo, guess1) << "\n";
-    std::cout << "Guess 2: " << guess2 << " ==> " << response(secret_demo, guess2) << "\n";
-    std::cout << "Guess 3: " << guess3 << " ==> " << response(secret_demo, guess3) << "\n";
+    std::cout << "Guess 1: " << guess1 << " ==> "
+              << response(secret_demo, guess1) << "\n";
+    std::cout << "Guess 2: " << guess2 << " ==> "
+              << response(secret_demo, guess2) << "\n";
+    std::cout << "Guess 3: " << guess3 << " ==> "
+              << response(secret_demo, guess3) << "\n";
 
     mastermind game;
     game.playGame();
