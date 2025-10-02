@@ -50,6 +50,7 @@ void card::setValue(card_value a_value)
 */
 deck::deck()
 {
+    // Define the order of suits and values
     const card_suit suits[] = {SUIT_CLUB, SUIT_DIAMOND, SUIT_HEART, SUIT_SPADE};
 
     const card_value values[] = {CARDVAL_ACE,
@@ -65,17 +66,21 @@ deck::deck()
                                  CARDVAL_QUEEN,
                                  CARDVAL_KING};
 
+    // Count # of suits and values for the loops
     const unsigned short n_suits = sizeof(suits) / sizeof(card_suit);
     const unsigned short n_values = sizeof(values) / sizeof(card_value);
 
-    for (unsigned short i_suit = 0; i_suit < n_suits; i_suit++)
+    // Loop over value-suit pairs in reverse order, adding each to the top
+    for (short i_suit = n_suits - 1; i_suit >= 0; i_suit--)
     {
-        for (unsigned short i_value = 0; i_value < n_values; i_value++)
+        for (short i_value = n_values - 1; i_value >= 0; i_value--)
         {
+            card_suit suit = suits[i_suit];
+            card_value value = values[i_value];
 
+            placeCardTop(card(suit, value));
         }
     }
-    // TODO: Finish using placeCardTop()
 }
 
 /* Reorders the cards in this deck randomly */
@@ -108,6 +113,9 @@ const card &deck::getCardAt(unsigned int index) const
 */
 card deck::takeTopCard()
 {
+    if (card_first == nullptr)
+        throw std::out_of_range("Cannot take a card from an empty deck");
+
     node<card> *oldTopNode = card_first;
     card oldTopCard = oldTopNode->nodeValue;
 
@@ -121,7 +129,8 @@ card deck::takeTopCard()
 }
 
 /* Places a card on the top of the deck */
-void deck::placeCardTop(const card &toPlace){
+void deck::placeCardTop(const card &toPlace)
+{
     node<card> *newTopNode = new node<card>;
 
     // Set the next node of the new top node to be the old top node
@@ -136,5 +145,12 @@ void deck::placeCardTop(const card &toPlace){
 
 void operator<<(std::ostream &lhs, const deck &rhs)
 {
+    // TODO
+}
+
+int main()
+{
+    // Initialize a deck and print all the cards in the deck before shuffle and
+    // after shuffle.
     // TODO
 }
