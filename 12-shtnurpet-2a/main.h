@@ -78,30 +78,34 @@ class card
 class deck
 {
   public:
-    /*
+    /*!
       Constructor for all 52 unique cards in order, ace-king /
       club-diamond-heart-spade
+      (ace club, 2 club, 3 club, etc)
     */
     deck();
 
-    /* Reorders the cards in this deck randomly */
+    /*! Reorders the cards in this deck randomly */
     void shuffle();
 
-    /*
-      Returns the card [index] cards down from the top, i.e 0 is the top, 1 is the
-      first card down, etc
+    /*!
+      Returns the card [index] cards down from the top, i.e 0 is the top, 1 is
+      the first card down, etc
       @param index The card index to find from the top, 0 being the top card
     */
     const card &getCardAt(unsigned int index) const;
 
-    /*
-      Returns and removes the top card from this deck.
-    */
+    /* Returns and removes the top card from this deck. */
     card takeTopCard();
 
+    /*! Places a card on the top of the deck */
+    void placeCardTop(const card &toPlace);
 
   private:
-    /*! Pointer to the first card in the linked list */
+    /*!
+      Pointer to the first card in the linked list. The last card in this linked
+      list points to nullptr
+    */
     node<card> *card_first;
 }; // end deck class
 
